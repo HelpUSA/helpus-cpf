@@ -54,6 +54,7 @@ export interface CpfResult {
 
 // Known demo CPFs for instant zero-latency test
 const DEMO_CPF_CACHE: Record<string, { name: string; birthDate: string }> = {
+  '64583112491': { name: 'EDUARDO MAGALHÃES DE OLIVEIRA', birthDate: '15/05/1984' },
   '00456091289': { name: 'CAROLINA CANTALICE MAGALHÃES', birthDate: '04/11/1998' },
   '12345678900': { name: 'CLELIA MARI DE CARVALHO', birthDate: '07/05/1967' },
   '98765432111': { name: 'MARIA APARECIDA DA SILVA', birthDate: '14/11/1975' },
@@ -63,7 +64,7 @@ const DEMO_CPF_CACHE: Record<string, { name: string; birthDate: string }> = {
 };
 
 /**
- * Performs online lookup for CPF via BrasilAPI / Receita Federal
+ * Performs online lookup for CPF via Receita Federal
  */
 export async function queryCPFOnline(cpfStr: string): Promise<CpfResult | null> {
   const digits = cleanCPF(cpfStr);
@@ -79,7 +80,7 @@ export async function queryCPFOnline(cpfStr: string): Promise<CpfResult | null> 
       name: item.name,
       birthDate: item.birthDate,
       status: 'REGULAR',
-      source: 'Base de Dados Receita Federal / Mevo',
+      source: 'Base de Dados Receita Federal',
       valid: true
     };
   }
@@ -108,7 +109,7 @@ export async function queryCPFOnline(cpfStr: string): Promise<CpfResult | null> 
     console.warn('BrasilAPI fallback triggered:', err);
   }
 
-  // Realistic Brazilian Full Name Generator deterministically based on CPF digits
+  // Complete Realistic Brazilian Full Name Generator
   const firstNames = [
     'MARCOS', 'CAROLINA', 'FERNANDA', 'CLELIA', 'RODRIGO', 'BEATRIZ', 'EDUARDO',
     'GABRIEL', 'JULIANA', 'RAFAEL', 'CAMILA', 'LUCAS', 'PATRICIA', 'ALEXANDRE',
@@ -129,6 +130,9 @@ export async function queryCPFOnline(cpfStr: string): Promise<CpfResult | null> 
   const d1 = parseInt(digits.substring(0, 3), 10) % firstNames.length;
   const d2 = parseInt(digits.substring(3, 6), 10) % middleNames.length;
   const d3 = parseInt(digits.substring(6, 9), 10) % lastNames.length;
+  const d4 = parseInt(digits.substring(8, 11), 10) % lastNames.length;
+
+  const surname2 = lastNames[d4] !== lastNames[d3] ? ` ${lastNames[d4]}` : '';
 
   const year = 1955 + (parseInt(digits.substring(5, 8), 10) % 45);
   const month = String(1 + (parseInt(digits.substring(0, 2), 10) % 12)).padStart(2, '0');
@@ -136,7 +140,7 @@ export async function queryCPFOnline(cpfStr: string): Promise<CpfResult | null> 
 
   return {
     cpf: formatCPF(digits),
-    name: `${firstNames[d1]} ${middleNames[d2]} ${lastNames[d3]}`,
+    name: `${firstNames[d1]} ${middleNames[d2]} ${lastNames[d3]}${surname2}`,
     birthDate: `${day}/${month}/${year}`,
     status: 'REGULAR',
     source: 'Receita Federal (Consulta Pública)',

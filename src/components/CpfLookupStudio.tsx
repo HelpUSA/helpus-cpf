@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Loader2, CheckCircle2, AlertCircle, User, Calendar, ShieldCheck, Code, Copy, Check } from 'lucide-react';
+import { Search, Loader2, CheckCircle2, AlertCircle, User, Calendar } from 'lucide-react';
 import { formatCPF, isValidCPFAlgorithm, queryCPFOnline, type CpfResult } from '../utils/cpfValidator';
 import { type TranslationSchema } from '../i18n/translations';
 
@@ -12,7 +12,6 @@ export const CpfLookupStudio: React.FC<CpfLookupStudioProps> = ({ t }) => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<CpfResult | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatCPF(e.target.value);
@@ -47,13 +46,6 @@ export const CpfLookupStudio: React.FC<CpfLookupStudioProps> = ({ t }) => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const copyEndpoint = () => {
-    const endpointUrl = `https://cpf.helpusbr.com/api/v1/lookup?cpf=${encodeURIComponent(cpf || '004.560.912-89')}`;
-    navigator.clipboard.writeText(endpointUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -140,26 +132,6 @@ export const CpfLookupStudio: React.FC<CpfLookupStudioProps> = ({ t }) => {
           </div>
         </div>
       )}
-
-      {/* API Code Integration Sample */}
-      <div className="pt-4 border-t border-slate-800">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
-            <Code className="w-4 h-4 text-emerald-400" /> {t.apiDemoTitle}
-          </span>
-          <button
-            onClick={copyEndpoint}
-            className="text-xs text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-semibold transition-colors cursor-pointer"
-          >
-            {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-            <span>{copied ? t.copied : t.copySnippet}</span>
-          </button>
-        </div>
-        <p className="text-xs text-slate-400 mb-2">{t.apiSnippetLabel}</p>
-        <pre className="p-3 rounded-xl bg-slate-950 border border-slate-800 font-mono text-xs text-emerald-300 overflow-x-auto">
-          {`GET https://cpf.helpusbr.com/api/v1/lookup?cpf=${encodeURIComponent(cpf || '00456091289')}`}
-        </pre>
-      </div>
     </div>
   );
 };
