@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { CpfLookupStudio } from './components/CpfLookupStudio';
-import { Pricing } from './components/Pricing';
 import { ShieldCheck, Zap, Globe, Sparkles } from 'lucide-react';
 import { translations, type Language } from './i18n/translations';
 
@@ -55,9 +54,6 @@ export const App: React.FC = () => {
 
         {/* CPF Studio App */}
         <CpfLookupStudio t={t.studio} />
-
-        {/* Pricing Cards */}
-        <Pricing t={t.pricing} />
 
         {/* Features / Benefits */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 pt-10 border-t border-slate-900">
