@@ -54,7 +54,6 @@ export interface CpfResult {
 
 // Known demo CPFs for instant zero-latency test
 const DEMO_CPF_CACHE: Record<string, { name: string; birthDate: string }> = {
-  '64583112491': { name: 'EDUARDO MAGALHÃES DE OLIVEIRA', birthDate: '15/05/1984' },
   '00456091289': { name: 'CAROLINA CANTALICE MAGALHÃES', birthDate: '04/11/1998' },
   '12345678900': { name: 'CLELIA MARI DE CARVALHO', birthDate: '07/05/1967' },
   '98765432111': { name: 'MARIA APARECIDA DA SILVA', birthDate: '14/11/1975' },
